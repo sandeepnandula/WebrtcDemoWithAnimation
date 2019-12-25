@@ -1,23 +1,26 @@
-import React from 'react';
-import logo from '../logo.svg';
+import React, { useEffect } from 'react';
 import '../App.css';
+import signalingServer from '../js/signalingServer';
 
 function App() {
+  useEffect(() => {
+    signalingServer.connectToWebsocket();
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div id="container">
+
+          <video id="localVideo" playsinline autoplay muted></video>
+          <video id="remoteVideo" playsinline autoplay></video>
+
+          <div className="box">
+            <button id="startButton">Start</button>
+            <button id="callButton">Call</button>
+            <button id="hangupButton">Hang Up</button>
+          </div>
+
+        </div>
       </header>
     </div>
   );
