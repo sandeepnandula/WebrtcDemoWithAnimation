@@ -1,29 +1,35 @@
-import React, { useEffect } from 'react';
-import '../App.css';
-import signalingServer from '../js/signalingServer';
+import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 
-function App() {
+// import {InteractiveForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-force';
+import signalingServer from '../js/signaling/signalingServer';
+import Buttons from './buttons';
+import { Participant } from './participant';
+
+const  App = ({ participantId }) => {
   useEffect(() => {
-    signalingServer.connectToWebsocket();
+    // signalingServer.connectToWebsocket();
   }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <div id="container">
-
-          <video id="localVideo" playsinline autoplay muted></video>
-          <video id="remoteVideo" playsinline autoplay></video>
-
-          <div className="box">
-            <button id="startButton">Start</button>
-            <button id="callButton">Call</button>
-            <button id="hangupButton">Hang Up</button>
+    <div className="app">
+          <div className='video-layout'>
+            <div className='flex-container'>
+                <Participant participantID={participantId} isLocal/>
+            </div>
+            <Buttons />
           </div>
-
-        </div>
-      </header>
+          <div className='animation'> 
+            <h1>Connections</h1>
+          </div>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = store => ({
+  participantId: store.localParticipant.id,
+  participants: store.participants,
+});
+
+
+export default connect(mapStateToProps, null)(App);
+
