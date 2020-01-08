@@ -5,6 +5,7 @@ import App from './components/App';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import store from './appStore';
+import '../src/css/animate.scss';
 
 
 ReactDOM.render( <Provider store={store}>

@@ -57,8 +57,7 @@ table {
   width:60%;
   float:left;
 }
-.app .animation{
-  width: 40%;
+.app .animation-container{
   float:right;
 }
 
@@ -82,3 +81,5 @@ table {
 .app .video-layout .box-controls button {
   margin: 0 10px;
 }
+
+

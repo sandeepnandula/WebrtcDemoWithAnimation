@@ -4,31 +4,38 @@ import { connect } from 'react-redux';
 import {Audio} from './audio';
 import {Video} from './video';
 import { getMediaStreamObjectByTrack } from '../../js/utils/utils';
+import webrtcController from '../../js/webrtc/webrtcController';
 
-const participantContainer = ({ participantId, videoTrack, audioTrack }) => {
+const participantContainer = ({ participantId, videoStream, audioStream, isLocal }) => {
         return (
            <React.Fragment>
-               <Audio streamObject={audioTrack}/>
-               <Video streamObject={videoTrack} />
+               {!isLocal  && <Audio streamObject={audioStream}/>}
+               <Video streamObject={videoStream} />
            </React.Fragment>
         );
 }
 
 
 const mapStateToProps = (store, { participantId, isLocal }) => {
-    let audioTrack;
-    let videoTrack;
+    let audioStream;
+    let videoStream;
     if (isLocal) {
-        audioTrack = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.audioTrackId);
-        videoTrack = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.videoTrackId);
+        audioStream = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.audioTrackId);
+        videoStream = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.videoTrackId);
         return {
             participantId,
-            audioTrack: audioTrack ? getMediaStreamObjectByTrack(audioTrack) : '',
-            videoTrack: videoTrack && getMediaStreamObjectByTrack(videoTrack),
+            audioStream: audioStream ? getMediaStreamObjectByTrack(audioStream) : '',
+            videoStream: videoStream && getMediaStreamObjectByTrack(videoStream),
+            isLocal,
         }
-    } return {
-        audioTrack: {},
-        videoTrack: {},
+    }
+    const participant = store.participants[participantId];
+    const audioTrack = webrtcController.getTrackById(participant.audioTrackId);
+    const videoTrack = webrtcController.getTrackById(participant.videoTrackId);
+    return {
+        audioStream: getMediaStreamObjectByTrack(audioTrack) || {},
+        videoStream: getMediaStreamObjectByTrack(videoTrack) || {},
+        isLocal,
     }
    
   };
