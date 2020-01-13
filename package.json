@@ -80,14 +80,20 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      "last 20 chrome version",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not ie < 11",
+      "iOS 7",
+      "last 3 iOS versions"
     ],
     "development": [
-      "last 1 chrome version",
+      "last 20 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "not ie < 11",
+      "iOS 7",
+      "last 3 iOS versions"
     ]
   },
   "jest": {
