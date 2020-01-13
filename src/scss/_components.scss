@@ -1,0 +1,30 @@
+//Buttons
+
+.btn{
+    display: inline-block;
+    font-size: 15px;
+    padding: 10px 15px;
+    min-width:100px;
+    border: 1px solid $border-primary;
+    border-radius:4px;
+    color: $secondary-text-color;
+    background-image: linear-gradient(to right, #fbaf3b, #ff6400,#fbaf3b, #ff6400);
+    background-size: 300% 100%;
+    background-position: 0% 0%;
+    border-radius: 50px;
+    text-align: center;
+    font-weight:$semi-bold;
+    transition: background-position 1.5s;
+    cursor:pointer;
+    &:hover{
+        background-position: 100% 0%;
+    }
+
+    &:focus{
+        color: $secondary-text-color;
+    }
+     
+}
+
+
+

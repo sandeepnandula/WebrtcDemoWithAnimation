@@ -1,5 +1,5 @@
 import { SIGNALING_URL, PARTICIPANT_CONNECTED, PARTICIPANT_DISCONNECTED, PARTICIPANT_INFO, OFFER, ANSWER, ICE_CANDIDATE, UPDATE_PARTICIPANT_DETAILS } from "../constants";
-import { socketAccessToken } from "../../config";
+// import { socketAccessToken } from "../../config";
 import { getRoomName } from "../utils/utils";
 import { getItemFromStore, dispatchAction } from "../storeManeger";
 import { addParticipant, removeParticipant } from "../../reducers/participants/participant-actions";
@@ -10,7 +10,7 @@ import peerConnections from "../webrtc/peerConnections";
 class SignalingServer {
     constructor() {
         this.channelId = getRoomName();
-        this.socketUrl = `${SIGNALING_URL}/${this.channelId}?token=${socketAccessToken}`;
+        this.socketUrl = `${SIGNALING_URL}/${this.channelId}?token=${''}`;
         this.webSocket = null;
     }
 

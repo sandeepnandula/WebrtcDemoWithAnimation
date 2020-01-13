@@ -12,15 +12,27 @@ const App = ({ participantId, participants, websocketConnected }) => {
   }, [])
   return (
     <div className="app">
+
+      <h1>MESH Architecture</h1>
+
       <div className='video-layout'>
-        <div className='flex-container'>
+        <div className='video-wrapper'>
           <Participant participantID={participantId} isLocal />
           {participants.map(participant => {
             return (<Participant participantId={participant.id} />)
           })}
+          <video>
+
+          </video>
+          <video>
+
+          </video>
         </div>
         <Buttons />
       </div>
+
+      <div className="animation-layout">
+
       <div className="animation-container">
       <svg className="svg" width="350" height="350" viewBox="0 0 325 325" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -30,17 +42,19 @@ const App = ({ participantId, participants, websocketConnected }) => {
             </linearGradient>
       </defs>
         <circle r="100" cx="50%" cy="50%" fill="transparent" strokeDasharray="628" stroke="#e2e2e2" strokeDashoffset="0"></circle>
-        <circle className="bar bar-1" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
-        <circle className="bar bar-2" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(-60)'></circle>
-        <circle className="bar bar-3" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
-        <circle className="bar bar-4" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(60)'></circle>
-        <circle className="bar bar-5" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(60)' ></circle>
-        <circle className="bar bar-6" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(300)'></circle>  
+        <circle className="bar a2b" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
+        <circle className="bar b2a" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(-60)'></circle>
+        <circle className="bar a2c" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
+        <circle className="bar c2a" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(60)'></circle>
+        <circle className="bar c2b animate" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(60)' ></circle>
+        <circle className="bar b2c animate" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(300)'></circle>  
         </svg>
-        {websocketConnected && <div className="avatar avatar--a">A</div>}
-        {participants.length >= 1 && <div className="avatar avatar--b">B</div>}
-        {participants.length >= 2 && <div className="avatar avatar--c">C</div>}
+        {<div className="avatar avatar--a">A</div>}
+        {<div className="avatar avatar--b">B</div>}
+        {<div className="avatar avatar--c">C</div>}
       </ div>
+      </div>
+      
     </div>
   );
 }
