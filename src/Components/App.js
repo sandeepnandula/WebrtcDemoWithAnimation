@@ -21,12 +21,6 @@ const App = ({ participantId, participants, websocketConnected }) => {
           {participants.map(participant => {
             return (<Participant participantId={participant.id} />)
           })}
-          <video>
-
-          </video>
-          <video>
-
-          </video>
         </div>
         <Buttons />
       </div>
