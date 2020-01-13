@@ -5,6 +5,7 @@ import { getItemFromStore, dispatchAction } from "../storeManeger";
 import { addParticipant, removeParticipant } from "../../reducers/participants/participant-actions";
 import webrtcController from "../webrtc/webrtcController";
 import { setWebsocketConnected, setWebsocketDisconnected } from "../../reducers/room/room-actions";
+import peerConnections from "../webrtc/peerConnections";
 
 class SignalingServer {
     constructor() {
@@ -43,7 +44,7 @@ class SignalingServer {
 
     sendMessageViaSocket({ type, data}) {
         console.log('Sending message')
-        console.log(JSON.stringify({ type, data}))
+        console.log(JSON.stringify({ type }))
         this.webSocket.send(JSON.stringify({ type, data}));
     }
 
@@ -52,15 +53,18 @@ class SignalingServer {
         const participantDetails = getItemFromStore('localParticipant');
         const { type, data } = JSON.parse(e.data)
         console.log('type', type);
-        console.log('data', data);
         switch (type) {
             case PARTICIPANT_CONNECTED: {
-                // this.sendParticipantDetails();
                  dispatchAction(addParticipant(data.participantDetails))
                  this.sendParticipantDetails(UPDATE_PARTICIPANT_DETAILS);
+                 webrtcController.createPeerConnectionObject(data.participantDetails.id);
                  return
             }
             case UPDATE_PARTICIPANT_DETAILS: {
+                const peerConnectionObject = peerConnections.getPeerconnectionObject(data.participantDetails.id)
+                if (!peerConnectionObject) {
+                  webrtcController.createPeerConnectionObject(data.participantDetails.id);
+                }
                 dispatchAction(addParticipant(data.participantDetails));
                 return
             }
@@ -70,19 +74,26 @@ class SignalingServer {
             }
             case OFFER: {
                 if (data.toId === participantDetails.id) {
-                    webrtcController.setRemoteDiscription(data.offer)
-                    webrtcController.createAnswer(data.fromId);
+                    // Here we are pulling the from id peerConnection object
+                    const peerConnectionObject = peerConnections.getPeerconnectionObject(data.fromId);
+                    webrtcController.setRemoteDiscription(data.offer, peerConnectionObject)
+                    webrtcController.createAnswer(data.fromId, peerConnectionObject);
                 }
                 return;
             }
             case ANSWER: {
                 if (data.toId === participantDetails.id) {
-                    webrtcController.setRemoteDiscription(data.answer)
+                    const peerConnectionObject = peerConnections.getPeerconnectionObject(data.fromId);
+                    webrtcController.setRemoteDiscription(data.answer, peerConnectionObject)
                 }
                 return;
             }
             case ICE_CANDIDATE: {
-                webrtcController.setIceCandidate(data);
+                if (data.toId === participantDetails.id) {
+                    console.log(data)
+                    const peerConnectionObject = peerConnections.getPeerconnectionObject(data.fromId);
+                    webrtcController.setIceCandidate(data.candidate, peerConnectionObject);
+                }
                 return;
             }
             default:

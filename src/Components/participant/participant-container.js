@@ -17,24 +17,21 @@ const participantContainer = ({ participantId, videoStream, audioStream, isLocal
 
 
 const mapStateToProps = (store, { participantId, isLocal }) => {
-    let audioStream;
     let videoStream;
     if (isLocal) {
-        audioStream = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.audioTrackId);
         videoStream = window.localStreamObject && window.localStreamObject.getTrackById(store.localParticipant.videoTrackId);
         return {
             participantId,
-            audioStream: audioStream ? getMediaStreamObjectByTrack(audioStream) : '',
             videoStream: videoStream && getMediaStreamObjectByTrack(videoStream),
             isLocal,
         }
     }
     const participant = store.participants[participantId];
-    const audioTrack = webrtcController.getTrackById(participant.audioTrackId);
-    const videoTrack = webrtcController.getTrackById(participant.videoTrackId);
+    const audioTrack = webrtcController.getTrackById(participant.audioTrackId, participantId);
+    const videoTrack = webrtcController.getTrackById(participant.videoTrackId, participantId);
     return {
-        audioStream: getMediaStreamObjectByTrack(audioTrack) || {},
-        videoStream: getMediaStreamObjectByTrack(videoTrack) || {},
+        audioStream: audioTrack && getMediaStreamObjectByTrack(audioTrack),
+        videoStream: videoTrack && getMediaStreamObjectByTrack(videoTrack),
         isLocal,
     }
    

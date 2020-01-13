@@ -25,8 +25,8 @@ const App = ({ participantId, participants, websocketConnected }) => {
       <svg className="svg" width="350" height="350" viewBox="0 0 325 325" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <defs>
             <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#a6cd3b" />
-              <stop offset="100%" stop-color="#2980b8" />
+              <stop offset="0%" stopColor="#a6cd3b" />
+              <stop offset="100%" stopColor="#2980b8" />
             </linearGradient>
       </defs>
         <circle r="100" cx="50%" cy="50%" fill="transparent" strokeDasharray="628" stroke="#e2e2e2" strokeDashoffset="0"></circle>

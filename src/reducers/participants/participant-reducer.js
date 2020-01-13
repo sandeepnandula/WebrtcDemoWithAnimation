@@ -1,15 +1,13 @@
 import { generateUserId } from "../../js/utils/idGenerator";
 import generateName from 'sillyname';
-import { ADD_AUDIO_TRACK, ADD_VIDEO_TRACK, ADD_PARTICIPANT, DISCONNECT_CALL, MEDIA_STREAM, TRACK_ADDED } from "./participant-actions";
+import { ADD_AUDIO_TRACK, ADD_VIDEO_TRACK, ADD_PARTICIPANT, DISCONNECT_CALL, TRACK_ADDED } from "./participant-actions";
 import { PARTICIPANT_DISCONNECTED } from "../../js/constants";
-import { getMediaStreamObjectByTrack } from "../../js/utils/utils";
 
 const initialLocalParticipantState = {
     id: generateUserId(),
     name: generateName().split(' ')[0],
     audioTrackId: '',
     videoTrackId: '',
-    mediaStreamId: '',
 }
 
 const participant = (state, { type, data }) => {
@@ -22,7 +20,6 @@ const participant = (state, { type, data }) => {
                 videoTrackId: data.videoTrackId,
                 audioTrack: '',
                 videoTrack: '',
-                mediaStreamId: data.mediaStreamId,
             }
         case ADD_AUDIO_TRACK:
             return {
@@ -33,11 +30,6 @@ const participant = (state, { type, data }) => {
             return {
                 ...state,
                 videoTrackId: data.id,
-            }
-        case MEDIA_STREAM:
-            return {
-                ...state,
-                mediaStreamId: data.id
             }
         case TRACK_ADDED: {
             if (data.track.kind === 'audio') {
@@ -81,7 +73,6 @@ const localParticipant = (state = initialLocalParticipantState, { type, data }) 
     switch (type) {
         case ADD_AUDIO_TRACK:
         case ADD_VIDEO_TRACK:
-        case MEDIA_STREAM:
             return {
                 ...participant(state, { type, data }),
             };

@@ -1,7 +1,8 @@
 import signalingServer from "../signaling/signalingServer";
-import { dispatchAction, getItemFromStore } from "../storeManeger";
-import { addAudioTrackID, addVideoTrackID, DISCONNECT_CALL, addMediaStreamId } from "../../reducers/participants/participant-actions";
+import { dispatchAction, getItemFromStore, getLocalUserId } from "../storeManeger";
+import { addAudioTrackID, addVideoTrackID, DISCONNECT_CALL } from "../../reducers/participants/participant-actions";
 import webrtcController from "../webrtc/webrtcController";
+import peerConnections from "../webrtc/peerConnections";
 
 export const onClickStart = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -12,8 +13,7 @@ export const onClickStart = async () => {
       const videoTrack = stream.getVideoTracks()[0];
       dispatchAction(addAudioTrackID({ id: audioTrack && audioTrack.id }));
       dispatchAction(addVideoTrackID({ id: videoTrack && videoTrack.id }));
-      dispatchAction(addMediaStreamId({ id: stream.id }));
-      webrtcController.createPeerConnectionObject();
+      webrtcController.createPeerConnectionObject(getLocalUserId());
 }
 
 export const onClickCall = async () => {
@@ -27,7 +27,7 @@ export const onClickCall = async () => {
 export const onClickHungUp = () => {
   dispatchAction({ type: DISCONNECT_CALL });
   signalingServer.disconnectToWebsocket();
-  webrtcController.peerConnectionObject.close();
+  peerConnections.getMap();
   signalingServer.webSocket.close();
   webrtcController.peerConnectionObject = null;
   signalingServer.webSocket = null;

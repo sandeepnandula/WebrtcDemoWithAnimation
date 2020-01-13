@@ -26,22 +26,9 @@ function getLocalUserId() {
   return localUser.id;
 }
 
-
-const getParticipantIdByStreamId = (id) => {
-  let participantId;
-  const participantsObj = getItemFromStore('participants');
-  const participants = Object.values(participantsObj);
-  participants.forEach(participant => {
-      if(participant.mediaStreamId === id) {
-        participantId = participant.id;
-      }
-  });
-  return participantId
-}
 export {
   getItemFromStore,
   dispatchAction,
   getStore,
   getLocalUserId,
-  getParticipantIdByStreamId,
 };
