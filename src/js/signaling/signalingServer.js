@@ -1,7 +1,10 @@
-import { SIGNALING_URL, PARTICIPANT_CONNECTED, PARTICIPANT_DISCONNECTED, PARTICIPANT_INFO } from "../constants";
+import { SIGNALING_URL, PARTICIPANT_CONNECTED, PARTICIPANT_DISCONNECTED, PARTICIPANT_INFO, OFFER, ANSWER, ICE_CANDIDATE, UPDATE_PARTICIPANT_DETAILS } from "../constants";
 import { socketAccessToken } from "../../config";
 import { getRoomName } from "../utils/utils";
-import { getItemFromStore } from "../storeManeger";
+import { getItemFromStore, dispatchAction } from "../storeManeger";
+import { addParticipant, removeParticipant } from "../../reducers/participants/participant-actions";
+import webrtcController from "../webrtc/webrtcController";
+import { setWebsocketConnected, setWebsocketDisconnected } from "../../reducers/room/room-actions";
 
 class SignalingServer {
     constructor() {
@@ -17,7 +20,7 @@ class SignalingServer {
 
     disconnectToWebsocket() {
         const clossingMessage = { type: PARTICIPANT_DISCONNECTED, data: {
-            participantDetails: {},
+            participantDetails: getItemFromStore('localParticipant'),
         }}
         this.sendMessageViaSocket(clossingMessage);
         this.webSocket.close()
@@ -26,11 +29,16 @@ class SignalingServer {
     socketOnOpeon(e) {
         console.log(e);
         console.log('Websocket is connected')
-        const data = { type: PARTICIPANT_CONNECTED, data: {
+        this.sendParticipantDetails();
+        dispatchAction(setWebsocketConnected());
+        window.addEventListener('beforeunload', this.disconnectToWebsocket.bind(this));
+    }
+
+    sendParticipantDetails(type) {
+        const data = { type: type || PARTICIPANT_CONNECTED, data: {
             participantDetails: getItemFromStore('localParticipant'),
         }}
         this.sendMessageViaSocket(data);
-        window.addEventListener('beforeunload', this.disconnectToWebsocket.bind(this));
     }
 
     sendMessageViaSocket({ type, data}) {
@@ -41,12 +49,42 @@ class SignalingServer {
 
     socketOnMessage(e) {
         console.log('Websocket message')
+        const participantDetails = getItemFromStore('localParticipant');
         const { type, data } = JSON.parse(e.data)
-        console.log(data)
+        console.log('type', type);
+        console.log('data', data);
         switch (type) {
-            case PARTICIPANT_CONNECTED:
-            
-                // this.sendParticipantInfo();
+            case PARTICIPANT_CONNECTED: {
+                // this.sendParticipantDetails();
+                 dispatchAction(addParticipant(data.participantDetails))
+                 this.sendParticipantDetails(UPDATE_PARTICIPANT_DETAILS);
+                 return
+            }
+            case UPDATE_PARTICIPANT_DETAILS: {
+                dispatchAction(addParticipant(data.participantDetails));
+                return
+            }
+            case PARTICIPANT_DISCONNECTED: {
+                dispatchAction(removeParticipant(data.participantDetails));
+                return;
+            }
+            case OFFER: {
+                if (data.toId === participantDetails.id) {
+                    webrtcController.setRemoteDiscription(data.offer)
+                    webrtcController.createAnswer(data.fromId);
+                }
+                return;
+            }
+            case ANSWER: {
+                if (data.toId === participantDetails.id) {
+                    webrtcController.setRemoteDiscription(data.answer)
+                }
+                return;
+            }
+            case ICE_CANDIDATE: {
+                webrtcController.setIceCandidate(data);
+                return;
+            }
             default:
                 break;
         }
@@ -65,6 +103,7 @@ class SignalingServer {
     socketOnClose(e) {
         console.log(e);
         console.log('Websocket closed')
+        dispatchAction(setWebsocketDisconnected());
     }
 
     addEventListeners() {
@@ -75,5 +114,6 @@ class SignalingServer {
 }
 
 const signalingServer = new SignalingServer();
+window.signalingServer = signalingServer
 export default signalingServer;
 
