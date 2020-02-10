@@ -21,6 +21,9 @@ The build is minified and the filenames include the hashes.<br />
 
 ### `Instructions for adding access token`
 
-Create a config.js file and server access token from 
+Create a config.js file inside `/src` and server access token from 
 https://www.websocket.in/ 
 to run the signaling server.
+
+## Note
+We are going to update this repo for further code refactoring.
