@@ -20,6 +20,7 @@ const participant = (state, { type, data }) => {
                 videoTrackId: data.videoTrackId,
                 audioTrack: '',
                 videoTrack: '',
+                connected: false,
             }
         case ADD_AUDIO_TRACK:
             return {

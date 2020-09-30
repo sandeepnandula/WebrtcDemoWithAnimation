@@ -35,5 +35,9 @@
         .btn {
             margin: 0 10px;
         }
+        .disabled {
+            background-image: linear-gradient(to right, #47525d, #47525d, #47525d, #47525d) !important;
+            cursor: not-allowed !important;
+        }
     }
 }

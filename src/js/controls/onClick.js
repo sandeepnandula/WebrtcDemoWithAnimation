@@ -26,9 +26,13 @@ export const onClickCall = async () => {
 
 export const onClickHungUp = () => {
   dispatchAction({ type: DISCONNECT_CALL });
+  const participantsObj = getItemFromStore('participants');
+  const participants = Object.values(participantsObj);
+  participants.forEach(participant => {
+    const peer = peerConnections.getPeerconnectionObject(participant.id)
+    if (peer) peer.close();
+  })
   signalingServer.disconnectToWebsocket();
-  peerConnections.getMap();
-  signalingServer.webSocket.close();
   webrtcController.peerConnectionObject = null;
   signalingServer.webSocket = null;
   const localTracks = window.localStreamObject.getTracks()

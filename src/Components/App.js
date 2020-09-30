@@ -22,7 +22,7 @@ const App = ({ participantId, participants, websocketConnected }) => {
             return (<Participant participantId={participant.id} />)
           })}
         </div>
-        <Buttons />
+        <Buttons websocketConnected={websocketConnected}/>
       </div>
 
       <div className="animation-layout">
@@ -36,16 +36,16 @@ const App = ({ participantId, participants, websocketConnected }) => {
             </linearGradient>
       </defs>
         <circle r="100" cx="50%" cy="50%" fill="transparent" strokeDasharray="628" stroke="#e2e2e2" strokeDashoffset="0"></circle>
-        <circle className="bar a2b" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
-        <circle className="bar b2a" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(-60)'></circle>
-        <circle className="bar a2c" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
-        <circle className="bar c2a" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(60)'></circle>
-        <circle className="bar c2b animate" r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(60)' ></circle>
-        <circle className="bar b2c animate" r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(300)'></circle>  
+        <circle className={`bar a2b ${participants.length >= 1 ? 'animate' : ''}`} r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
+        <circle className={`bar b2a ${participants.length >= 1 ? 'animate' : ''}`} r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(-60)'></circle>
+        <circle className={`bar a2c ${participants.length >= 2 ? 'animate' : ''}`} r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(-180)' ></circle>
+        <circle className={`bar c2a ${participants.length >= 2 ? 'animate' : ''}`} r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(60)'></circle>
+        <circle className={`bar c2b ${participants.length >= 2 ? 'animate' : ''}`} r="100" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="628" strokeDashoffset="0" transform='rotate(60)' ></circle>
+        <circle className={`bar b2c ${participants.length >= 2 ? 'animate' : ''}`} r="125" cx="50%" cy="50%" fill="transparent" stroke="url(#linear)" strokeWidth="5" strokeDasharray="785" strokeDashoffset="0" transform='rotate(300)'></circle>  
         </svg>
-        {<div className="avatar avatar--a">A</div>}
-        {<div className="avatar avatar--b">B</div>}
-        {<div className="avatar avatar--c">C</div>}
+        {websocketConnected && <div className="avatar avatar--a">A</div>}
+        {participants.length >= 1 && <div className="avatar avatar--b">B</div>}
+        {participants.length >= 2 && <div className="avatar avatar--c">C</div>}
       </ div>
       </div>
       

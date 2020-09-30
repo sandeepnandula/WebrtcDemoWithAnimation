@@ -89,6 +89,7 @@ class SignalingServer {
                 return;
             }
             case ICE_CANDIDATE: {
+                console.log(data)
                 if (data.toId === participantDetails.id) {
                     console.log(data)
                     const peerConnectionObject = peerConnections.getPeerconnectionObject(data.fromId);

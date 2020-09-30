@@ -10,7 +10,9 @@ class PeerConnections {
     getPeerconnectionObject(participantId) {
         if (participantId) {
             const map = this.getMap();
-            return map.get(participantId);
+            if (map) {
+               return map.get(participantId);
+            }
         }
     }
 
